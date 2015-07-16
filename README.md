@@ -24,10 +24,10 @@ Building
 
 Auto-detect of devices with UPnP
 ==========
-Openhab 2.0's new Paper UI includes feature to recognize devices on the same network using UPnP protocol. This in done by sending discorevy UDP messages to 239.255.255.250:1900. Other UPnP devices (such as Philips Hue hub) will response message to this same address. Sending the UDP multicast message is done correctly from the container, but receiving them however requires support from Docker to enable
- MULTICASTING on container network device, which is not yet implemented (7/2015). You can follow the discussion [here at the GitHub issue page][1] There are 2 work-arounds available: 
-* Run container with --net=host option. This in practice will map 1:1 all ports on the container and enable the container to receive multicast UDP messages.
-* Run container with --net=none option. This defers creating the network interface. Then on the host use [__pipework__][2] to create the network interface on the container side with IFF_MULTICAST set:
+Openhab 2.0's new Paper UI includes feature to recognize devices on the same network using UPnP protocol. This in done by sending discovery UDP messages to 239.255.255.250:1900. Other UPnP devices (such as Philips Hue hub) will response message to this same address. Sending the UDP multicast message is done correctly from the container, but receiving them however requires support from Docker to enable
+ MULTICASTING on container network interface, which is not yet implemented (7/2015). You can follow the discussion [here at the GitHub issue page][1] There are 2 work-arounds available: 
+* Run container with --net=host option. This will use the network interface of the host instead of creating a separate one for the container. In practice it will map 1:1 all ports on the container to the host and enable the container to receive multicast UDP messages.
+* Run container with --net=none option. This defers creating the network interface during the startup. Then on the host use [__pipework__][2] to create the network interface on the container side with IFF_MULTICAST set:
 ```
 pipework docker0 -i eth0 CONTAINER_ID IP_ADDRESS/IP_MASK@DEFAULT_ROUTE_IP
 ```
@@ -62,7 +62,6 @@ org.openhab.persistence.gcal
 org.openhab.persistence.rrd4j
 ```
 
-NOTE! Even if you don't use additional plugins, create empty addons.cfg. Otherwise Openhab will be started with demo files!
 * The openHAB process is managed using supervisord.  You can manage the process (and view logs) by exposing port 9001. From there it is possible to switch between NORMAL and DEBUG versions of OpenHAB runtime.
 * The container supports starting without network (--net="none"), and adding network interfaces using pipework.
 * You can add a timezone file in the configurations directory, which will be placed in /etc/timezone. Default: UTC
@@ -77,12 +76,12 @@ Example: run command (with your openHAB config)
 docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ wetware/openhab
 ```
 
-Example: run command (with your openHAB config) and enable UPnP auto-detect feature (see above)
+Example: run command (with your openHAB config) and use hosts network if to enable UPnP auto-detect feature (see above)
 ```
 docker run -d -p 8080:8080 --net=host -v /tmp/configuration:/etc/openhab/ wetware/openhab
 
 ```
-Example: run command (with your openHAB config) and populate the plugin configuration files with examples 
+Example: run command (with your openHAB config) and populate the service directory with example plugin configuration files 
 ```
 docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ -e "EXAMPLE_CONF=1" wetware/openhab
 ```
