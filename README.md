@@ -111,16 +111,13 @@ http://[IP-of-Docker-Host]:9001
 HABmin
 =======
 
-HABmin is not included in this deployment.  However you can easily add is as follows:
+HABmin is not automatically included in this deployment.  However you can easily enable it by adding following plugins to addons.cfg:
 ```
-docker run -d -p 8080:8080 -v /<your_location>/webapps/habmin:/opt/openhab/webapps/habmin -v /<your_location>/openhab/config:/etc/openhab -v /<your_location>/openhab/addons-available/habmin:/opt/openhab/addons-available/habmin tdeckers/openhab
+org.openhab.binding.zwave
+org.openhab.ui.habmin
+
 ```
 
-Then add these lines to addon.cfg
-```
-habmin/org.openhab.binding.zwave
-habmin/org.openhab.io.habmin
-```
 
 Contributors
 ============

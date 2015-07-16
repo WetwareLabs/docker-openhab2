@@ -26,6 +26,9 @@ ADD files/scripts/download_openhab.sh /root/docker-files/scripts/
 RUN chmod +x /root/docker-files/scripts/download_openhab.sh  && \
    /root/docker-files/scripts/download_openhab.sh
 
+RUN echo "Download HABMin2"
+RUN wget -P /opt/openhab/addons-available/addons/ https://github.com/cdjackson/HABmin2/releases/download/0.0.15/org.openhab.ui.habmin_2.0.0.SNAPSHOT-0.0.15.jar 
+
 ADD files /root/docker-files/
 
 #

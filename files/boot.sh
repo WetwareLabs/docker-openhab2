@@ -29,9 +29,9 @@ function addons {
   do
     STRING=${STRING%$'\r'}
     echo Processing $STRING...
-    if [ -f $SOURCE/addons/$STRING-*.jar ]
+    if [ -f $SOURCE/addons/$STRING*.jar ]
     then
-      ln -s $SOURCE/addons/$STRING-*.jar $DEST/
+      ln -s $SOURCE/addons/$STRING*.jar $DEST/
       echo link created.
     else
       echo not found.
