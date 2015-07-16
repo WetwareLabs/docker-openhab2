@@ -29,9 +29,9 @@ function addons {
   do
     STRING=${STRING%$'\r'}
     echo Processing $STRING...
-    if [ -f $SOURCE/$STRING-*.jar ]
+    if [ -f $SOURCE/addons/$STRING-*.jar ]
     then
-      ln -s $SOURCE/$STRING-*.jar $DEST/
+      ln -s $SOURCE/addons/$STRING-*.jar $DEST/
       echo link created.
     else
       echo not found.
@@ -46,13 +46,19 @@ else
   echo addons.cfg not found.
 fi
 
-###########################################
-# Download Demo if no configuration is given
+# copy example add-on configuration files if EXAMPLE_CONF is set
+if [ "$EXAMPLE_CONF" ]
+then
+	cp -Rn $SOURCE/conf/* $CONFIG_DIR/
+fi
 
-if [ -f $CONFIG_DIR/openhab.cfg ]
+###########################################
+# Configure demo if no configuration is given (if volume is not mapped on /etc/openhab then DEMO_MODE file is not over-written) 
+
+if [ ! -f "$CONFIG_DIR/DEMO_MODE" ]
 then
   echo configuration found.
-  rm -rf /tmp/demo-openhab*
+#  rm -rf /tmp/demo-openhab*
 else
   echo --------------------------------------------------------
   echo          NO openhab.cfg CONFIGURATION FOUND
@@ -62,9 +68,9 @@ else
   echo Consider running the Docker with a openhab configuration
   echo 
   echo --------------------------------------------------------
-  cp -R /opt/openhab/demo-configuration/configurations/* /etc/openhab/
+  cp -R /opt/openhab/demo-configuration/conf/* /etc/openhab/
   ln -s /opt/openhab/demo-configuration/addons/* /opt/openhab/addons/
-  ln -s /etc/openhab/openhab_default.cfg /etc/openhab/openhab.cfg
+#  ln -s /etc/openhab/openhab_default.cfg /etc/openhab/openhab.cfg
 fi
 
 ######################
