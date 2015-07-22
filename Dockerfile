@@ -26,14 +26,29 @@ ADD files/scripts/download_openhab.sh /root/docker-files/scripts/
 RUN chmod +x /root/docker-files/scripts/download_openhab.sh  && \
    /root/docker-files/scripts/download_openhab.sh
 
+#
+# Download HABMIN
+#
 RUN echo "Download HABMin2"
 RUN wget -P /opt/openhab/addons-available/addons/ https://github.com/cdjackson/HABmin2/releases/download/0.0.15/org.openhab.ui.habmin_2.0.0.SNAPSHOT-0.0.15.jar 
 
-ADD files /root/docker-files/
+#
+# Download Openhab 1.x dependencies
+#
+RUN echo "Download OpenHAB 1.x dependencies"
+RUN wget -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-addons.zip
+#RUN wget -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-runtime.zip
+RUN unzip -q /tmp/distribution-1.8.0-SNAPSHOT-addons.zip -d /opt/openhab/addons-available-oh1
+#RUN unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip server/plugins/org.openhab.io.transport.mqtt* -d /opt/openhab/addons-available-oh1/
+#RUN unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip configurations/openhab_default.cfg -d /opt/openhab/
+RUN wget -P /opt/openhab/ https://raw.githubusercontent.com/openhab/openhab/master/distribution/openhabhome/configurations/openhab_default.cfg
+# for some reason there's now extra io.transport.mqtt in OH2 (from OH1) that interferes with MQTT if it is left there. But it works if used from addons-directory...
+RUN mv /opt/openhab/runtime/server/plugins/org.openhab.io.transport.mqtt* /opt/openhab/addons-available-oh1/
 
 #
 # Setup other configuration files and scripts
 #
+ADD files /root/docker-files/
 RUN \
   cp /root/docker-files/pipework /usr/local/bin/pipework && \
   cp /root/docker-files/supervisord.conf /etc/supervisor/supervisord.conf && \

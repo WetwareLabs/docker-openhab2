@@ -20,18 +20,22 @@ SOURCE=/opt/openhab/addons-available
 DEST=/opt/openhab/addons
 ADDONFILE=$CONFIG_DIR/addons.cfg
 
-function addons {
-  # Remove all links first
-  rm $DEST/*
+# Remove all links first
+rm $DEST/*
 
+function addons {
   # create new links based on input file
   while read STRING
   do
     STRING=${STRING%$'\r'}
     echo Processing $STRING...
-    if [ -f $SOURCE/addons/$STRING*.jar ]
+    if [ -f $SOURCE/addons/$STRING-*.jar ]
     then
-      ln -s $SOURCE/addons/$STRING*.jar $DEST/
+      ln -s $SOURCE/addons/$STRING-*.jar $DEST/
+      echo link created.
+    elif [ -f $SOURCE/addons/${STRING}_*.jar ]
+    then
+      ln -s $SOURCE/addons/${STRING}_*.jar $DEST/
       echo link created.
     else
       echo not found.
@@ -51,6 +55,44 @@ if [ "$EXAMPLE_CONF" ]
 then
 	cp -Rn $SOURCE/conf/* $CONFIG_DIR/
 fi
+
+###########################
+# Configure Addon libraries from Openhab 1.x
+
+SOURCE=/opt/openhab/addons-available-oh1
+DEST=/opt/openhab/addons
+ADDONFILE=$CONFIG_DIR/addons-oh1.cfg
+
+function addons-oh1 {
+  # create new links based on input file
+  while read STRING
+  do
+    STRING=${STRING%$'\r'}
+    echo Processing $STRING...
+    if [ -f $SOURCE/$STRING-*.jar ]
+    then
+      ln -s $SOURCE/$STRING-*.jar $DEST/
+      echo link created.
+    elif [ -f $SOURCE/${STRING}_*.jar ]
+    then
+      ln -s $SOURCE/${STRING}_*.jar $DEST/
+      echo link created.
+    else
+      echo not found.
+    fi
+  done < "$ADDONFILE"
+}
+
+if [ -f "$ADDONFILE" ]
+then
+  addons-oh1
+else
+  echo addons-oh1.cfg not found.
+fi
+
+# copy example add-on configuration (old openhab.cfg) 
+cp -n /opt/openhab/openhab_default.cfg $CONFIG_DIR/services/openhab.cfg
+
 
 ###########################################
 # Configure demo if no configuration is given (if volume is not mapped on /etc/openhab then DEMO_MODE file is not over-written) 
