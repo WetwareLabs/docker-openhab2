@@ -41,10 +41,11 @@ Configuring
 
 This container expects you to map a configurations directory from the host to /etc/openhab. This allows you to inject your openhab configuration into the container (see example below).
 
-NOTE! Starting from 2.0.0 there is no general configuration file (as openhab.cfg in previous versions), but each add-on/plugin is configured separately on its services/<plugin-name>.txt file. You can manually create them, or define "EXAMPLE_CONF=1" when starting the container (see running example below). Example conf files from ALL the plugins will be then copied to services-directory. (No file will be over-written though, so you can edit them safely.)
-
 OpenHAB 2.0 plugins
-==
+--------
+
+Starting from 2.0.0 there is no general configuration file (as openhab.cfg in previous versions), but each add-on/plugin is configured separately on its services/<plugin-name>.txt file. You can manually create them, or define "EXAMPLE_CONF=1" when starting the container (see running example below). Example conf files from ALL the (OpenHAB 2.0) plugins will be then copied to services-directory. (No file will be over-written though, so you can edit them safely.)
+
 To use your own configuration and enable specific plugins, add a file with name __addons.cfg__ in the configuration directory which lists all addons you want to add.
 
 Example content for addons.cfg:
@@ -62,18 +63,18 @@ org.openhab.persistence.logging
 ```
 
 OpenHAB 1.x plugins
-==
+----------
 Since not all 1.x plugins have yet been ported to 2.0 platform, you can enable them by adding a file __addons-oh1.cfg__ to the configuration directory which lists all addons you want to add.
 For example, to add __MQTT__ support using OpenHAB 1.x plugins:
 ```
 org.openhab.binding.mqtt
 org.openhab.io.transport.mqtt
 ```
-Configuring 1.x plugins is done by editing __<conf-directory>/services/openhab.cfg__, which uses old 1.x syntax. If openhab.cfg is not found, a default configuration is copied to services-directory when conteiner is started. Note that all entries in the file are ignored by default except by those plugins that are explicitly defined as above.
+Configuring 1.x plugins is done by editing __\[conf-directory\]/services/openhab.cfg__, which uses old 1.x syntax. If openhab.cfg is not found, a default configuration is copied to services-directory when conteiner is started. Note that all other entries in the file are ignored by default, except by those plugins that are explicitly defined in addons-oh1.cfg.
 
 
 Timezone
-==
+---------
 You can add a timezone file in the configurations directory, which will be placed in /etc/timezone. Default: UTC
 
 Example content for timezone:
@@ -145,7 +146,7 @@ Logging
 In OpenHAB 1.x logging was configured by modifying __logback.xml__ and __logback_debug.xml__ files in *configuration*-directory and log files were saved to /opt/openhab/logs. In OpenHAB 2.0 this has changed in following ways:
 
  * Logging directory is now __/opt/openhab/userdata/logs__ (easily mapped to host directory as Docker volume)
- * logback conf files are now situated in /opt/openhab/runtime/etc/, BUT since modifying these directly in the container causes headache (also mapping as volume would overwite other files there), these two files are mapped again to configuration directory. If user specified logback files are not found there, default files will be copied and are easily modified afterwards. 
+ * logback conf files are now situated in /opt/openhab/runtime/etc/, BUT since modifying these directly in the container causes headache (also mapping as volume would overwite other files there), these two files are __mapped again to configuration directory__. If user specified logback files are not found there, default files will be copied and are easily modified afterwards. 
 
 
 Contributors
