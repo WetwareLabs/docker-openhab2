@@ -45,21 +45,16 @@ Running
 
 Example content for addons.cfg:
 ```
+org.eclipse.smarthome.binding.hue
+org.eclipse.smarthome.binding.yahooweather
 org.openhab.action.mail
-org.openhab.action.squeezebox
 org.openhab.action.xmpp
+org.openhab.binding.squeezebox
 org.openhab.binding.exec
 org.openhab.binding.http
 org.openhab.binding.knx
-org.openhab.binding.mqtt
-org.openhab.binding.networkhealth
-org.openhab.binding.serial
-org.openhab.binding.squeezebox
-org.openhab.io.squeezeserver
-org.openhab.persistence.cosm
-org.openhab.persistence.db4o
-org.openhab.persistence.gcal
 org.openhab.persistence.rrd4j
+org.openhab.persistence.logging
 ```
 
 * The openHAB process is managed using supervisord.  You can manage the process (and view logs) by exposing port 9001. From there it is possible to switch between NORMAL and DEBUG versions of OpenHAB runtime.
@@ -73,28 +68,27 @@ Europe/Brussels
 
 Example: run command (with your openHAB config)
 ```
-docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ wetware/openhab
+docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ wetware/openhab2
 ```
 
 Example: run command (with your openHAB config) and use hosts network if to enable UPnP auto-detect feature (see above)
 ```
-docker run -d -p 8080:8080 --net=host -v /tmp/configuration:/etc/openhab/ wetware/openhab
+docker run -d -p 8080:8080 --net=host -v /tmp/configuration:/etc/openhab/ wetware/openhab2
 
 ```
 Example: run command (with your openHAB config) and populate the service directory with example plugin configuration files 
 ```
-docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ -e "EXAMPLE_CONF=1" wetware/openhab
+docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ -e "EXAMPLE_CONF=1" wetware/openhab2
 ```
-
 
 Example: Map configuration and logging directory as well as allow access to Supervisor:
 ```
-docker run -d -p 8080:8080 -p 9001:9001 -v /tmp/configurations/:/etc/openhab -v /tmp/logs:/opt/openhab/logs wetware/openhab
+docker run -d -p 8080:8080 -p 9001:9001 -v /tmp/configurations/:/etc/openhab -v /tmp/logs:/opt/openhab/userdata/logs wetware/openhab2
 ```
 
 Example: run command (with Demo)
 ```
-docker run -d -p 8080:8080 tdeckers/openhab
+docker run -d -p 8080:8080 wetware/openhab2
 ```
 
 Start the Demo with: 
@@ -117,6 +111,17 @@ org.openhab.binding.zwave
 org.openhab.ui.habmin
 
 ```
+
+After starting container, you can then access HABmin on the address:
+```
+http://[IP-of-Docker-Host]:8080/habmin/index.html
+```
+
+Logging
+=======
+In OpenHAB 1.x logging was configured by modifying logback.xml and logback_debug.xml files in *configuration*-directory and log files were saved to /opt/openhab/logs. In OpenHAB 2.0 this has changed in following ways:
+ * Logging directory is now __/opt/openhab/userdata/logs__ (easily mapped to host directory as Docker volume)
+ * logback conf files are now situated in /opt/openhab/runtime/etc/, BUT since modifying these directly in the container causes headache (also mapping as volume would overwite other files there), these two files are mapped again to configuration directory. If user specified logback files are not found there, default files will be copied and are easily modified afterwards. 
 
 
 Contributors

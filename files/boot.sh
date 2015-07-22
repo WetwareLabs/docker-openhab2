@@ -73,6 +73,11 @@ else
 #  ln -s /etc/openhab/openhab_default.cfg /etc/openhab/openhab.cfg
 fi
 
+##########################################
+# Copy default logging configuration files
+cp -n /opt/openhab/runtime/etc/logback.xml $CONFIG_DIR/
+cp -n /opt/openhab/runtime/etc/logback_debug.xml $CONFIG_DIR/
+
 ######################
 # Decide how to launch
 
