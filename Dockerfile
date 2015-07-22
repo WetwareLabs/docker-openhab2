@@ -46,6 +46,10 @@ RUN \
   chmod +x /usr/local/bin/pipework && \
   chmod +x /usr/local/bin/boot.sh && \
   chmod +x /etc/network/if-up.d/openhab-restart && \
+  chmod +x /root/docker-files/start.sh  && \
+  chmod +x /root/docker-files/start_debug.sh  && \
+  cp /root/docker-files/start.sh /opt/openhab/ && \
+  cp /root/docker-files/start_debug.sh /opt/openhab/ && \
   rm -rf /tmp/*
 
 EXPOSE 8080 8443 5555 9001
