@@ -21,20 +21,20 @@ RUN /root/docker-files/scripts/download_openhab.sh
 # Download HABMIN
 #
 RUN echo "Download HABMin2"
-RUN wget -P /opt/openhab/addons-available/addons/ https://github.com/cdjackson/HABmin2/releases/download/0.0.15/org.openhab.ui.habmin_2.0.0.SNAPSHOT-0.0.15.jar 
+RUN wget -q -P /opt/openhab/addons-available/addons/ https://github.com/cdjackson/HABmin2/releases/download/0.0.15/org.openhab.ui.habmin_2.0.0.SNAPSHOT-0.0.15.jar 
 
 #
 # Download Openhab 1.x dependencies
 #
 RUN echo "Download OpenHAB 1.x dependencies"
-RUN wget -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-addons.zip && \
-  # wget -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-runtime.zip && \
+RUN wget -q -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-addons.zip && \
+  # wget -q -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-runtime.zip && \
   unzip -q /tmp/distribution-1.8.0-SNAPSHOT-addons.zip -d /opt/openhab/addons-available-oh1 && \
   # unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip server/plugins/org.openhab.io.transport.mqtt* -d /opt/openhab/addons-available-oh1/  && \
   # unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip configurations/openhab_default.cfg -d /opt/openhab/ && \
   rm /tmp/distribution-1.8.0-*
 
-RUN wget -P /opt/openhab/ https://raw.githubusercontent.com/openhab/openhab/master/distribution/openhabhome/configurations/openhab_default.cfg
+RUN wget -q -P /opt/openhab/ https://raw.githubusercontent.com/openhab/openhab/master/distribution/openhabhome/configurations/openhab_default.cfg
 
 #
 # Setup other configuration files and scripts
