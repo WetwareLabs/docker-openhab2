@@ -21,7 +21,6 @@ fi
 #wget --quiet --no-check-certificate --no-cookies -O /tmp/org.openhab.io.myopenhab-1.7.0.jar https://bintray.com/artifact/download/openhab/mvn/org/openhab/io/org.openhab.io.myopenhab/1.7.0/org.openhab.io.myopenhab-1.7.0.jar
 wget --quiet --no-check-certificate --no-cookies -O /tmp/hyperic-sigar-1.6.4.tar.gz http://downloads.sourceforge.net/project/sigar/sigar/1.6/hyperic-sigar-1.6.4.tar.gz
 
-rm -rf /opt/openhab
 mkdir -p /opt/openhab/addons-available
 mkdir -p /opt/openhab/addons
 mkdir -p /opt/openhab/demo-configuration
@@ -38,3 +37,5 @@ chmod +x /opt/openhab/start.sh
 #mv /tmp/org.openhab.io.myopenhab-1.7.0.jar /opt/openhab/addons-available
 mv /opt/openhab/conf /etc/openhab
 ln -s /etc/openhab /opt/openhab/conf
+
+rm -f /tmp/distribution-* /tmp/demo-openhab.zip /tmp/hyperic-sigar-*
