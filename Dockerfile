@@ -1,7 +1,7 @@
 # Openhab 2.0.0
 # * configuration is injected
 #
-FROM java:8u45-jdk
+FROM java:8u45-jre
 MAINTAINER Marcus of Wetware Labs <marcus@wetwa.re>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -28,13 +28,14 @@ RUN wget -q -P /opt/openhab/addons-available/addons/ https://github.com/cdjackso
 #
 RUN echo "Download OpenHAB 1.x dependencies"
 RUN wget -q -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-addons.zip && \
-  # wget -q -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-runtime.zip && \
-  unzip -q /tmp/distribution-1.8.0-SNAPSHOT-addons.zip -d /opt/openhab/addons-available-oh1 && \
-  # unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip server/plugins/org.openhab.io.transport.mqtt* -d /opt/openhab/addons-available-oh1/  && \
-  # unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip configurations/openhab_default.cfg -d /opt/openhab/ && \
-  rm /tmp/distribution-1.8.0-*
+    wget -q -P /tmp/ https://openhab.ci.cloudbees.com/job/openHAB/lastStableBuild/artifact/distribution/target/distribution-1.8.0-SNAPSHOT-runtime.zip && \
+    unzip -q /tmp/distribution-1.8.0-SNAPSHOT-addons.zip -d /opt/openhab/addons-available-oh1 && \
+    unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip server/plugins/org.openhab.io.transport.mqtt* -d /opt/openhab/addons-available-oh1/  && \
+    unzip -j /tmp/distribution-1.8.0-SNAPSHOT-runtime.zip configurations/openhab_default.cfg -d /opt/openhab/ && \
+    rm -f /opt/openhab/runtime/server/plugins/org.openhab.io.transport.mqtt* && \
+    rm /tmp/distribution-1.8.0-*
 
-RUN wget -q -P /opt/openhab/ https://raw.githubusercontent.com/openhab/openhab/master/distribution/openhabhome/configurations/openhab_default.cfg
+#RUN wget -q -P /opt/openhab/ https://raw.githubusercontent.com/openhab/openhab/master/distribution/openhabhome/configurations/openhab_default.cfg
 
 #
 # Setup other configuration files and scripts

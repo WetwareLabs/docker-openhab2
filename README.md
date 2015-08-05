@@ -40,6 +40,7 @@ Configuring
 =======
 
 This container expects you to map a configurations directory from the host to /etc/openhab. This allows you to inject your openhab configuration into the container (see example below).
+Configuration is done also via Paper UI (discover devices, configure OH2 specific plugins etc). If you want persistence in these changes, you can map the __userdata__ directory (see example below.)  
 
 OpenHAB 2.0 plugins
 --------
@@ -91,35 +92,50 @@ Running
 * The container supports starting without network (--net="none"), and adding network interfaces using pipework.
 
 Example: run command (with your openHAB config)
+
 ```
 docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ wetware/openhab2
 ```
 
 Example: run command (with your openHAB config) and use hosts network if to enable UPnP auto-detect feature (see above)
+
 ```
 docker run -d -p 8080:8080 --net=host -v /tmp/configuration:/etc/openhab/ wetware/openhab2
 
 ```
+
 Example: run command (with your openHAB config) and populate the service directory with example plugin configuration files 
+
 ```
 docker run -d -p 8080:8080 -v /tmp/configuration:/etc/openhab/ -e "EXAMPLE_CONF=1" wetware/openhab2
 ```
 
 Example: Map configuration and logging directory as well as allow access to Supervisor:
+
 ```
 docker run -d -p 8080:8080 -p 9001:9001 -v /tmp/configurations/:/etc/openhab -v /tmp/logs:/opt/openhab/userdata/logs wetware/openhab2
 ```
 
+Example: Map configuration directory and userdata (to allow persistence in Paper UI and Thing configurations) as well as allow access to Supervisor:
+
+```
+docker run -d -p 8080:8080 -p 9001:9001 -v /tmp/configurations/:/etc/openhab -v /tmp/userdata:/opt/openhab/userdata wetware/openhab2
+```
+
 Example: run command (with Demo)
+
 ```
 docker run -d -p 8080:8080 wetware/openhab2
 ```
 
 Start the Demo with: 
+
 ```
 http://[IP-of-Docker-Host]:8080/openhab.app?sitemap=demo
 ```
+
 Access Supervisor with: 
+
 ```
 http://[IP-of-Docker-Host]:9001
 ```
