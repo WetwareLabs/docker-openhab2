@@ -123,7 +123,7 @@ cp -n /opt/openhab/runtime/etc/logback_debug.xml $CONFIG_DIR/
 ######################
 # Decide how to launch
 
-ETH0_FOUND=`grep "eth0" /proc/net/dev`
+ETH0_FOUND=`grep "eth0\|enp0" /proc/net/dev`
 
 if [ -n "$ETH0_FOUND" ] ;
 then 
