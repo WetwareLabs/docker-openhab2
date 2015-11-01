@@ -1,7 +1,7 @@
 # Openhab 2.0.0
 # * configuration is injected
 #
-FROM java:8u45-jre
+FROM java:8u66-jre
 MAINTAINER Marcus of Wetware Labs <marcus@wetwa.re>
 
 ENV DEBIAN_FRONTEND noninteractive
