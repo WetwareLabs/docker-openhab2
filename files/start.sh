@@ -6,8 +6,19 @@ cd `dirname $0`
 eclipsehome="runtime/server";
 
 # set ports for HTTP(S) server
-HTTP_PORT=8080
-HTTPS_PORT=8443
+if [ ! -z ${OPENHAB_HTTP_PORT} ]
+then
+    HTTP_PORT=${OPENHAB_HTTP_PORT}
+else
+    HTTP_PORT=8080
+fi
+
+if [ ! -z ${OPENHAB_HTTPS_PORT} ]
+then
+    HTTPS_PORT=${OPENHAB_HTTPS_PORT}
+else
+    HTTPS_PORT=8443
+fi
 
 # get path to equinox jar inside $eclipsehome folder
 cp=$(find $eclipsehome -name "org.eclipse.equinox.launcher_*.jar" | sort | tail -1);
@@ -18,14 +29,15 @@ if [ -z "$cp" ]; then
 fi
 
 # program args
-prog_args="-Dlogback.configurationFile=./conf/logback.xml -DmdnsName=openhab -Dopenhab.logdir=./userdata/logs -Dsmarthome.servicecfg=./runtime/etc/services.cfg -Dsmarthome.servicepid=org.openhab -Dsmarthome.userdata=./userdata -Dorg.quartz.properties=./runtime/etc/quartz.properties -Djetty.etc.config.urls=etc/jetty.xml,etc/jetty-ssl.xml,etc/jetty-deployer.xml,etc/jetty-https.xml,etc/jetty-selector.xml"
+prog_args="-Dlogback.configurationFile=./runtime/etc/logback.xml -DmdnsName=openhab -Dopenhab.logdir=./userdata/logs -Dsmarthome.servicecfg=./runtime/etc/services.cfg -Dsmarthome.servicepid=org.openhab -Dsmarthome.userdata=./userdata -Dorg.quartz.properties=./runtime/etc/quartz.properties -Djetty.etc.config.urls=etc/jetty.xml,etc/jetty-ssl.xml,etc/jetty-deployer.xml,etc/jetty-https.xml,etc/jetty-selector.xml"
 
 echo Launching the openHAB runtime...
-exec java $prog_args \
+java $prog_args \
 	-Dosgi.clean=true \
 	-Declipse.ignoreApp=true \
 	-Dosgi.noShutdown=true \
 	-Djetty.home.bundle=org.openhab.io.jetty \
+	-Djetty.keystore.path=./runtime/etc/keystore \
 	-Dorg.osgi.service.http.port=$HTTP_PORT \
 	-Dorg.osgi.service.http.port.secure=$HTTPS_PORT \
 	-Dfelix.fileinstall.dir=addons \
